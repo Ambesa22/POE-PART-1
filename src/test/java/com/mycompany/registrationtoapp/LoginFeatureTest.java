@@ -18,7 +18,7 @@ public class LoginFeatureTest {
             "Smith",
             "j_s",
             "Password1!",
-            "+27821234567"
+                "+27821234567"
     );
 
     // Test 1: Valid username
