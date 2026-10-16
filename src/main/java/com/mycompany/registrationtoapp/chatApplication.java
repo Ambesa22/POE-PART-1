@@ -205,7 +205,7 @@ public class chatApplication {
                 .append("    \"messageHash\": \"")
                 .append(escapeJson(message.getMessageHash())).append("\",\n")
                 .append("    \"recipient\": \"")
-                .append(escapeJson(message.getRecipient())).append("\",\n")
+                .append(escapeJson(message.getReceiver())).append("\",\n")
                 .append("    \"message\": \"")
                 .append(escapeJson(message.getMessageText())).append("\"\n")
                 .append("  }");

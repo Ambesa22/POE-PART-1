@@ -80,7 +80,7 @@ public class QuickChatAppTest {
             "+27821234567", "Hello there", 0
         );
 
-        assertEquals("+27821234567", message.getRecipient());
+        assertEquals("+27821234567", message.getReceiver());
         assertEquals("Hello there", message.getMessageText());
     }
 }
