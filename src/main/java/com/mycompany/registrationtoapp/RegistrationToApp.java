@@ -56,6 +56,14 @@ public class RegistrationToApp {
             System.out.println(
                 user.returnLoginStatus(loginUsername, loginPassword)
             );
+              System.out.println(loginStatus);
+
+        // Connect Part 1 to Part 2.
+        if (user.loginUser(loginUsername, loginPassword)) {
+            QuickChatApp app = new QuickChatApp(input);
+            app.run();
+        } else {
+            System.out.println("Access denied. QuickChat was not opened.");
         }
 
         input.close();
