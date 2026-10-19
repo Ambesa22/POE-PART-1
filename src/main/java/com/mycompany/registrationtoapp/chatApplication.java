@@ -34,11 +34,11 @@ public class chatApplication {
         boolean running = true;
 
         while (running) {
-            System.out.println("\n===== QUICKCHAT MENU =====");
+            System.out.println("\n===== CHAT MENU =====");
             System.out.println("1. Send Messages");
             System.out.println("2. Show recently sent messages");
             System.out.println("3. Quit");
-            System.out.print("Choose an option: ");
+            System.out.print("please Choose an option: ");
 
             String choice = input.nextLine().trim();
 
@@ -50,7 +50,7 @@ public class chatApplication {
                     System.out.println("Coming Soon.");
                     break;
                 case "3":
-                    System.out.println("Thank you for using QuickChat.");
+                    System.out.println("Thank you for using the Chat.");
                     running = false;
                     break;
                 default:
