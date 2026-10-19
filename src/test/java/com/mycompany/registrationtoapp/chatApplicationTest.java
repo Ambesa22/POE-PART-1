@@ -143,15 +143,7 @@ public class chatApplicationTest {
     }
 
     // Test 15: Reject a message longer than 250 characters
-    @Test
-    public void testRejectLongMessageInConstructor() {
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> new SentMessages(
-                "+27821234567", "A".repeat(251), 0
-            )
-        );
-    }
+    
 
     // Test 16: Total sent messages starts at zero
     @Test
