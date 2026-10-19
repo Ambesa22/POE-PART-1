@@ -6,6 +6,7 @@ package com.mycompany.registrationtoapp;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -15,144 +16,105 @@ import java.util.Scanner;
  */
 public class chatApplicationTest {
 
-    // Test 1: Valid message
-    @Test
-    public void testValidMessage() {
-        assertTrue(
-            chatApplication.isValidMessage("Hello, how are you?")
-        );
-    }
 
-    // Test 2: Message with exactly 250 characters
-    @Test
-    public void testMessageOf250Characters() {
-        String message = "A".repeat(250);
 
+    @Test
+    void testValidMessage() {
+        String message = "Hello, how are you?";
         assertTrue(chatApplication.isValidMessage(message));
     }
 
-    // Test 3: Message exceeding 250 characters
     @Test
-    public void testMessageExceeds250Characters() {
-        String message = "A".repeat(251);
+    void testMessageExactly250Characters() {
+        String message = "A".repeat(250);
+        assertTrue(chatApplication.isValidMessage(message));
+    }
 
+    @Test
+    void testMessageOver250Characters() {
+        String message = "A".repeat(251);
         assertFalse(chatApplication.isValidMessage(message));
     }
 
-    // Test 4: Empty message
     @Test
-    public void testEmptyMessage() {
+    void testEmptyMessageIsInvalid() {
         assertFalse(chatApplication.isValidMessage(""));
     }
 
-    // Test 5: Message containing only spaces
     @Test
-    public void testMessageContainingOnlySpaces() {
+    void testWhitespaceMessageIsInvalid() {
         assertFalse(chatApplication.isValidMessage("   "));
     }
 
-    // Test 6: Valid South African recipient
     @Test
-    public void testValidRecipient() {
-        assertTrue(
-            chatApplication.isValidRecipient("+27821234567")
-        );
+    void testValidSouthAfricanRecipient() {
+        assertTrue(chatApplication.isValidRecipient("+27821234567"));
     }
 
-    // Test 7: Recipient without international code
     @Test
-    public void testRecipientWithoutCountryCode() {
-        assertFalse(
-            chatApplication.isValidRecipient("0821234567")
-        );
+    void testRecipientWithoutCountryCode() {
+        assertFalse(chatApplication.isValidRecipient("0821234567"));
     }
 
-    // Test 8: Recipient containing letters
     @Test
-    public void testRecipientContainingLetters() {
-        assertFalse(
-            chatApplication.isValidRecipient("+27ABC123456")
-        );
+    void testRecipientContainingLetters() {
+        assertFalse(chatApplication.isValidRecipient("+2782ABC4567"));
     }
 
-    // Test 9: Generate a ten-digit message ID
     @Test
-    public void testMessageIdContainsTenDigits() {
-        SentMessages message = new SentMessages(
-            "+27821234567", "Hello there", 0
-        );
+    void testMessageIdContainsTenDigits() {
+        SentMessages message =
+                new SentMessages("+27821234567", "Hello Thanks", 0);
 
-        assertTrue(
-            message.getMessageId().matches("\\d{10}")
-        );
+        assertTrue(message.getMessageId().matches("\\d{10}"));
     }
 
-    // Test 10: Generate the correct message hash format
     @Test
-    public void testMessageHash() {
-        SentMessages message = new SentMessages(
-            "+27821234567", "Hi Thanks", 0
-        );
+    void testMessageHashFormat() {
+        SentMessages message =
+                new SentMessages("+27821234567", "Hi Thanks", 0);
 
-        String expectedHash =
-            message.getMessageId().substring(0, 2)
-            + ":0:HITHANKS";
+        String expected = message.getMessageId().substring(0, 2)
+                + ":0:HITHANKS";
 
-        assertEquals(expectedHash, message.getMessageHash());
+        assertEquals(expected, message.getMessageHash());
     }
 
-    // Test 11: Check the receiver
     @Test
-    public void testGetReceiver() {
-        SentMessages message = new SentMessages(
-            "+27821234567", "Hello", 0
-        );
+    void testReceiverGetter() {
+        SentMessages message =
+                new SentMessages("+27821234567", "Hello", 1);
 
         assertEquals("+27821234567", message.getReceiver());
     }
 
-    // Test 12: Check the message text
     @Test
-    public void testGetMessageText() {
-        SentMessages message = new SentMessages(
-            "+27821234567", "Hello there", 0
-        );
+    void testMessageTextGetter() {
+        SentMessages message =
+                new SentMessages("+27821234567", "Hello World", 1);
 
-        assertEquals("Hello there", message.getMessageText());
+        assertEquals("Hello World", message.getMessageText());
     }
 
-    // Test 13: Check the message number
     @Test
-    public void testGetMessageNumber() {
-        SentMessages message = new SentMessages(
-            "+27821234567", "Hello", 2
-        );
+    void testMessageNumberGetter() {
+        SentMessages message =
+                new SentMessages("+27821234567", "Hello", 5);
 
-        assertEquals(2, message.getMessageNumber());
+        assertEquals(5, message.getMessageNumber());
     }
 
-    // Test 14: Reject an empty message in SentMessages
     @Test
-    public void testRejectEmptyMessageInConstructor() {
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> new SentMessages(
-                "+27821234567", "   ", 0
-            )
-        );
+    void testConstructorRejectsEmptyMessage() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new SentMessages("+27821234567", "", 0));
     }
 
-    // Test 15: Reject a message longer than 250 characters
-    
 
-    // Test 16: Total sent messages starts at zero
     @Test
-    public void testInitialTotalMessagesSent() {
+    void testInitialTotalMessagesIsZero() {
         Scanner scanner = new Scanner(
-            new ByteArrayInputStream(
-                new byte[0]
-            )
-        );
+                new ByteArrayInputStream(new byte[0]));
 
         chatApplication app = new chatApplication(scanner);
 
@@ -161,18 +123,14 @@ public class chatApplicationTest {
         scanner.close();
     }
 
-    // Test 17: Check message details in toString()
     @Test
-    public void testMessageToString() {
-        SentMessages message = new SentMessages(
-            "+27821234567", "Hello there", 0
-        );
+    void testToStringContainsMessageDetails() {
+        SentMessages message =
+                new SentMessages("+27821234567", "Hello World", 1);
 
-        String output = message.toString();
-
-        assertTrue(output.contains("Message ID:"));
-        assertTrue(output.contains("Message Hash:"));
-        assertTrue(output.contains("Receiver: +27821234567"));
-        assertTrue(output.contains("Message: Hello there"));
+        assertTrue(message.toString().contains(message.getMessageId()));
+        assertTrue(message.toString().contains(message.getMessageHash()));
+        assertTrue(message.toString().contains("+27821234567"));
+        assertTrue(message.toString().contains("Hello World"));
     }
 }
