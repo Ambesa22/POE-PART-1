@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 
 public class chatApplication {
-
+private final ManageMessages manager = new ManageMessages();
     private final Scanner input;
     private final List<SentMessages> sentMessages = new ArrayList<>();
     private final List<SentMessages> storedMessages = new ArrayList<>();
@@ -31,34 +31,47 @@ public class chatApplication {
     }
 
     public void run() {
-        boolean running = true;
 
-        while (running) {
-            System.out.println("\n===== CHAT MENU =====");
-            System.out.println("1. Send Messages");
-            System.out.println("2. Show recently sent messages");
-            System.out.println("3. Quit");
-            System.out.print("please Choose an option: ");
+    manager.loadStoredMessages();
 
-            String choice = input.nextLine().trim();
+    boolean running = true;
 
-            switch (choice) {
-                case "1":
-                    sendMessages();
-                    break;
-                case "2":
-                    System.out.println("Coming Soon.");
-                    break;
-                case "3":
-                    System.out.println("Thank you for using the Chat.");
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Invalid option. Choose 1, 2 or 3.");
-            }
+    while (running) {
+
+        System.out.println("\n===== QUICKCHAT MENU =====");
+        System.out.println("1. Send Messages");
+        System.out.println("2. Show Recently Sent Messages");
+        System.out.println("3. Quit");
+        System.out.println("4. Stored Messages");
+
+        System.out.print("Choose an option: ");
+
+        String choice = input.nextLine();
+
+        switch (choice) {
+
+            case "1":
+                sendMessages();
+                break;
+
+            case "2":
+                showSentMessages();
+                break;
+
+            case "3":
+                running = false;
+                System.out.println("Thank you for using QuickChat.");
+                break;
+
+            case "4":
+                storedMessagesMenu();
+                break;
+
+            default:
+                System.out.println("Invalid option. Please choose 1-4.");
         }
     }
-
+}
     private void sendMessages() {
         int numberOfMessages;
 
