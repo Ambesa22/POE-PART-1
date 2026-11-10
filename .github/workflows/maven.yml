@@ -1,0 +1,55 @@
+
+name: QuickChat Parts 1, 2 and 3 - Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+
+    name: Build QuickChat and Run JUnit Tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Step 1: Download the repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install Java 17.
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      # Step 3: Display Java and Maven versions.
+      - name: Check Java version
+        run: java -version
+
+      - name: Check Maven version
+        run: mvn -version
+
+      # Step 4: Compile the project and run all tests.
+      - name: Clean, build and test QuickChat
+        run: mvn --batch-mode clean verify
+
+      # Step 5: Confirm successful completion.
+      - name: Build and test completed
+        if: success()
+        run: echo "QuickChat Parts 1, 2 and 3 completed successfully."
