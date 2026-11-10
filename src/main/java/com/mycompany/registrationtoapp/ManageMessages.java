@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 /**
@@ -19,7 +20,7 @@ import java.util.Optional;
  * @author Student
  */
 public class ManageMessages {
-  private final Path jsonFile;
+   private final Path jsonFile;
 
     // Gson converts Java objects to and from JSON.
     private final Gson gson = new GsonBuilder()
@@ -43,6 +44,12 @@ public class ManageMessages {
 
     // Constructor used for testing with a separate JSON file.
     public ManageMessages(Path jsonFile) {
+
+        if (jsonFile == null) {
+            throw new IllegalArgumentException(
+                    "JSON file path cannot be null.");
+        }
+
         this.jsonFile = jsonFile;
         loadStoredMessages();
     }
@@ -85,6 +92,7 @@ public class ManageMessages {
     public boolean saveStoredMessages() {
 
         try {
+
             Path parent = jsonFile.toAbsolutePath().getParent();
 
             if (parent != null) {
@@ -97,7 +105,7 @@ public class ManageMessages {
 
             return true;
 
-        } catch (IOException exception) {
+        } catch (IOException | RuntimeException exception) {
 
             System.out.println(
                     "Error saving messages: "
@@ -130,8 +138,15 @@ public class ManageMessages {
                     gson.fromJson(json, messageListType);
 
             if (loadedMessages != null) {
+
                 storedMessages.clear();
-                storedMessages.addAll(loadedMessages);
+
+                for (SentMessages message : loadedMessages) {
+
+                    if (message != null) {
+                        storedMessages.add(message);
+                    }
+                }
             }
 
         } catch (IOException | RuntimeException exception) {
@@ -166,6 +181,7 @@ public class ManageMessages {
         List<String> hashes = new ArrayList<>();
 
         for (SentMessages message : storedMessages) {
+
             hashes.add(message.getMessageHash());
         }
 
@@ -178,6 +194,7 @@ public class ManageMessages {
         List<String> ids = new ArrayList<>();
 
         for (SentMessages message : storedMessages) {
+
             ids.add(message.getMessageId());
         }
 
@@ -189,11 +206,15 @@ public class ManageMessages {
     public void displayStoredSendersAndRecipients() {
 
         if (storedMessages.isEmpty()) {
-            System.out.println("There are no stored messages.");
+
+            System.out.println(
+                    "There are no stored messages.");
+
             return;
         }
 
-        System.out.println("\n===== STORED MESSAGE SENDERS AND RECIPIENTS =====");
+        System.out.println(
+                "\n===== STORED MESSAGE SENDERS AND RECIPIENTS =====");
 
         for (SentMessages message : storedMessages) {
 
@@ -211,6 +232,7 @@ public class ManageMessages {
     public Optional<SentMessages> getLongestStoredMessage() {
 
         return storedMessages.stream()
+                .filter(message -> message.getMessageText() != null)
                 .max((message1, message2) ->
                         Integer.compare(
                                 message1.getMessageText().length(),
@@ -227,7 +249,8 @@ public class ManageMessages {
 
             SentMessages message = longest.get();
 
-            System.out.println("\n===== LONGEST STORED MESSAGE =====");
+            System.out.println(
+                    "\n===== LONGEST STORED MESSAGE =====");
 
             System.out.println("Message: "
                     + message.getMessageText());
@@ -241,7 +264,8 @@ public class ManageMessages {
 
         } else {
 
-            System.out.println("There are no stored messages.");
+            System.out.println(
+                    "There are no stored messages.");
         }
     }
 
@@ -255,7 +279,8 @@ public class ManageMessages {
 
         return storedMessages.stream()
                 .filter(message ->
-                        message.getMessageId().equals(messageId))
+                        message.getMessageId() != null
+                        && message.getMessageId().equals(messageId.trim()))
                 .findFirst();
     }
 
@@ -271,8 +296,9 @@ public class ManageMessages {
 
         for (SentMessages message : storedMessages) {
 
-            if (message.getReceiver().equalsIgnoreCase(
-                    recipient.trim())) {
+            if (message.getReceiver() != null
+                    && message.getReceiver().equalsIgnoreCase(
+                            recipient.trim())) {
 
                 results.add(message);
             }
@@ -292,8 +318,9 @@ public class ManageMessages {
 
             SentMessages message = storedMessages.get(i);
 
-            if (message.getMessageHash().equalsIgnoreCase(
-                    messageHash.trim())) {
+            if (message.getMessageHash() != null
+                    && message.getMessageHash().equalsIgnoreCase(
+                            messageHash.trim())) {
 
                 // Temporarily remove the message.
                 storedMessages.remove(i);
@@ -318,11 +345,14 @@ public class ManageMessages {
 
         if (storedMessages.isEmpty()) {
 
-            System.out.println("There are no stored messages.");
+            System.out.println(
+                    "There are no stored messages.");
+
             return;
         }
 
-        System.out.println("\n========== STORED MESSAGE REPORT ==========");
+        System.out.println(
+                "\n========== STORED MESSAGE REPORT ==========");
 
         for (SentMessages message : storedMessages) {
 
@@ -343,4 +373,8 @@ public class ManageMessages {
 
         System.out.println("===========================================");
     }
-}    
+
+}
+
+     
+    
