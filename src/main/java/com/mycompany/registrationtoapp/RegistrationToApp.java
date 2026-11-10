@@ -6,102 +6,159 @@ package com.mycompany.registrationtoapp;
 
 import java.util.Scanner;
 
+
 /**
+ * 
+ * 
+ * 
+ * 
  *
  * @author Student
  */
-
 
 public class RegistrationToApp {
 
     public static void main(String[] args) {
 
+        // Create Scanner for user input
         Scanner input = new Scanner(System.in);
 
-        System.out.println(
-            "...... WELCOME TO THE REGISTRATION PAGE, LOGIN THE APP ......"
-        );
+        System.out.println("=================================");
+        System.out.println("       WELCOME TO QUICKCHAT      ");
+        System.out.println("=================================");
 
-        // Collect registration details
-        System.out.print("Please enter your first name: ");
-        String firstName = input.nextLine();
+        // =================================
+        // PART 1: USER REGISTRATION
+        // =================================
 
-        System.out.print("Please enter your last name: ");
-        String lastName = input.nextLine();
+        System.out.println("\n===== USER REGISTRATION =====");
 
-        System.out.print("Please enter your username: ");
-        String username = input.nextLine();
+        System.out.print("Enter your first name: ");
+        String firstName = input.nextLine().trim();
 
-        System.out.print("Please enter your password: ");
+        System.out.print("Enter your last name: ");
+        String lastName = input.nextLine().trim();
+
+        System.out.print(
+                "Enter your username (must contain an underscore "
+                + "and be no more than 5 characters): ");
+
+        String username = input.nextLine().trim();
+
+        System.out.print(
+                "Enter your password (minimum 8 characters, "
+                + "uppercase letter, number and special character): ");
+
         String password = input.nextLine();
 
         System.out.print(
-            "Please enter your cell phone number with the South African standard code: "
-        );
-        String phoneNumber = input.nextLine();
+                "Enter your South African cellphone number "
+                + "(+27XXXXXXXXX or 0XXXXXXXXX): ");
 
-        // Instantiate the user object
+        String phoneNumber = input.nextLine().trim();
+
+        // Create LoginFeature object
         LoginFeature user = new LoginFeature(
-            firstName,
-            lastName,
-            username,
-            password,
-            phoneNumber
+                firstName,
+                lastName,
+                username,
+                password,
+                phoneNumber
         );
 
-        // Registration process
-        System.out.println("\n...... REGISTRATION PROCESS ......");
+        // Check registration details
+        System.out.println("\n===== REGISTRATION RESULTS =====");
 
-        String registrationStatus = user.registerUser();
-        System.out.println(registrationStatus);
+        if (user.checkUsername()) {
+            System.out.println("Username successfully captured.");
+        } else {
+            System.out.println(
+                    "Username is incorrectly formatted. "
+                    + "It must contain an underscore and "
+                    + "be no more than 5 characters.");
+        }
 
-        // Check whether registration was successful
-        if (user.checkUsername()
-                && user.checkPassword()
-                && user.checkPhoneNumber()) {
+        if (user.checkPassword()) {
+            System.out.println("Password successfully captured.");
+        } else {
+            System.out.println(
+                    "Password is incorrectly formatted. "
+                    + "It must contain at least 8 characters, "
+                    + "an uppercase letter, a number and "
+                    + "a special character.");
+        }
 
-            System.out.println("\n...... LOGIN ......");
+        if (user.checkPhoneNumber()) {
+            System.out.println(
+                    "Cell phone number successfully captured.");
+        } else {
+            System.out.println(
+                    "Cell phone number is incorrectly formatted.");
+        }
 
-            // Collect login details
-            System.out.print("Enter username: ");
-            String loginUsername = input.nextLine();
+        // Check whether all registration requirements are met
+        if (!user.checkUsername()
+                || !user.checkPassword()
+                || !user.checkPhoneNumber()) {
 
-            System.out.print("Enter password: ");
-            String loginPassword = input.nextLine();
+            System.out.println(
+                    "\nRegistration unsuccessful. "
+                    + "Please restart the application "
+                    + "and enter valid details.");
 
-            // Display login status
-            String loginStatus = user.returnLoginStatus(
+            input.close();
+            return;
+        }
+
+        System.out.println("\n" + user.registerUser());
+
+        // =================================
+        // PART 1: USER LOGIN
+        // =================================
+
+        System.out.println("\n===== USER LOGIN =====");
+
+        System.out.print("Enter your username: ");
+        String loginUsername = input.nextLine().trim();
+
+        System.out.print("Enter your password: ");
+        String loginPassword = input.nextLine();
+
+        // Check login details
+        String loginStatus = user.returnLoginStatus(
                 loginUsername,
                 loginPassword
-            );
+        );
 
-            System.out.println(loginStatus);
+        System.out.println("\n" + loginStatus);
 
-            // this where the code for Part 1 and Part 2 connect
-            if (user.loginUser(loginUsername, loginPassword)) {
+        // =================================
+        // PART 2 AND PART 3: QUICKCHAT
+        // =================================
 
-                System.out.println("\n...... WELCOME TO CHAT APPLICATION ......");
+        if (user.loginUser(loginUsername, loginPassword)) {
 
-                // Start the Part 2 messaging application
-                chatApplication app = new chatApplication(input);
-                app.run();
+            System.out.println("\nWelcome to QuickChat.");
 
-            } else {
+            System.out.println(
+                    "You can now send, store and manage messages.");
 
-                System.out.println(
-                    "Access denied. chatApp was not opened."
-                );
-            }
+            // Create chat application using the same Scanner
+            chatApplication application =
+                    new chatApplication(input);
+
+            // Start Part 2 and Part 3
+            application.run();
 
         } else {
 
             System.out.println(
-                "Registration unsuccessful. Please restart "
-                + "and enter valid registration details."
-            );
+                    "\nLogin unsuccessful. "
+                    + "Access to QuickChat has been denied.");
         }
 
-        // Close the scanner after the application finishes
+        // Close Scanner after application finishes
         input.close();
     }
 }
+

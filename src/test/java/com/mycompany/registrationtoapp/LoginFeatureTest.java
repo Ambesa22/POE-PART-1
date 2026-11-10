@@ -12,175 +12,310 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class LoginFeatureTest {
 
-    // Test data
-    LoginFeature user = new LoginFeature(
-            "John",
-            "Smith",
-            "j_s",
-            "Password1!",
-                "+27821234567"
-    );
+    // Create a valid user for testing.
+    private LoginFeature createValidUser() {
 
-    // Test 1: Valid username
+        return new LoginFeature(
+                "Mike",
+                "Smith",
+                "m_123",
+                "Password1!",
+                "+27821234567"
+        );
+    }
+
+    // ==========================================
+    // PART 1: USERNAME VALIDATION TESTS
+    // ==========================================
+
     @Test
-    public void testCheckUsernameValid() {
+    public void testUsernameCorrectlyFormatted() {
+
+        LoginFeature user = createValidUser();
+
         assertTrue(user.checkUsername());
     }
 
-    // Test 2: Invalid username
     @Test
-    public void testCheckUsernameInvalid() {
+    public void testUsernameWithoutUnderscore() {
 
-        LoginFeature invalidUser = new LoginFeature(
-                "John",
+        LoginFeature user = new LoginFeature(
+                "Mike",
                 "Smith",
-                "johnsmith",
+                "mike1",
                 "Password1!",
                 "+27821234567"
         );
 
-        assertFalse(invalidUser.checkUsername());
+        assertFalse(user.checkUsername());
     }
 
-    // Test 3: Valid password
     @Test
-    public void testCheckPasswordValid() {
-        assertTrue(user.checkPassword());
-    }
+    public void testUsernameLongerThanFiveCharacters() {
 
-    // Test 4: Invalid password
-    @Test
-    public void testCheckPasswordInvalid() {
-
-        LoginFeature invalidUser = new LoginFeature(
-                "John",
+        LoginFeature user = new LoginFeature(
+                "Mike",
                 "Smith",
-                "j_s",
-                "password",
+                "mike_123",
+                "Password1!",
                 "+27821234567"
         );
 
-        assertFalse(invalidUser.checkPassword());
+        assertFalse(user.checkUsername());
     }
 
-    // Test 5: Valid phone number
     @Test
-    public void testCheckPhoneNumberValid() {
+    public void testUsernameWithUnderscoreAndFiveCharacters() {
+
+        LoginFeature user = new LoginFeature(
+                "Mike",
+                "Smith",
+                "m_123",
+                "Password1!",
+                "+27821234567"
+        );
+
+        assertTrue(user.checkUsername());
+    }
+
+    // ==========================================
+    // PART 1: PASSWORD VALIDATION TESTS
+    // ==========================================
+
+    @Test
+    public void testPasswordCorrectlyFormatted() {
+
+        LoginFeature user = createValidUser();
+
+        assertTrue(user.checkPassword());
+    }
+
+    @Test
+    public void testPasswordWithoutCapitalLetter() {
+
+        LoginFeature user = new LoginFeature(
+                "Mike",
+                "Smith",
+                "m_123",
+                "password1!",
+                "+27821234567"
+        );
+
+        assertFalse(user.checkPassword());
+    }
+
+    @Test
+    public void testPasswordWithoutNumber() {
+
+        LoginFeature user = new LoginFeature(
+                "Mike",
+                "Smith",
+                "m_123",
+                "Password!",
+                "+27821234567"
+        );
+
+        assertFalse(user.checkPassword());
+    }
+
+    @Test
+    public void testPasswordWithoutSpecialCharacter() {
+
+        LoginFeature user = new LoginFeature(
+                "Mike",
+                "Smith",
+                "m_123",
+                "Password12",
+                "+27821234567"
+        );
+
+        assertFalse(user.checkPassword());
+    }
+
+    @Test
+    public void testPasswordLessThanEightCharacters() {
+
+        LoginFeature user = new LoginFeature(
+                "Mike",
+                "Smith",
+                "m_123",
+                "Pass1!",
+                "+27821234567"
+        );
+
+        assertFalse(user.checkPassword());
+    }
+
+    // ==========================================
+    // PART 1: CELLPHONE NUMBER VALIDATION TESTS
+    // ==========================================
+
+    @Test
+    public void testInternationalCellphoneNumber() {
+
+        LoginFeature user = createValidUser();
+
         assertTrue(user.checkPhoneNumber());
     }
 
-    // Test 6: Invalid phone number
     @Test
-    public void testCheckPhoneNumberInvalid() {
+    public void testLocalSouthAfricanCellphoneNumber() {
 
-        LoginFeature invalidUser = new LoginFeature(
-                "John",
+        LoginFeature user = new LoginFeature(
+                "Mike",
                 "Smith",
-                "j_s",
+                "m_123",
                 "Password1!",
                 "0821234567"
         );
 
-        assertFalse(invalidUser.checkPhoneNumber());
+        assertTrue(user.checkPhoneNumber());
     }
 
-    // Test 7: Successful registration
     @Test
-    public void testRegisterUserSuccessful() {
+    public void testInvalidCellphoneNumber() {
 
-        String expected =
-                "Username successfully captured.\n"
-                + "Password successfully captured.\n"
-                + "Cell phone number successfully added.";
-
-        assertEquals(expected, user.registerUser());
-    }
-
-    // Test 8: Failed registration because of username
-    @Test
-    public void testRegisterUserInvalidUsername() {
-
-        LoginFeature invalidUser = new LoginFeature(
-                "John",
+        LoginFeature user = new LoginFeature(
+                "Mike",
                 "Smith",
-                "johnsmith",
+                "m_123",
                 "Password1!",
-                "+27821234567"
+                "08212345"
         );
 
-        String expected =
-                "Username is not correctly formatted; "
-                + "please ensure that your username contains "
-                + "an underscore and is no more than five "
-                + "characters in length.";
-
-        assertEquals(expected, invalidUser.registerUser());
+        assertFalse(user.checkPhoneNumber());
     }
 
-    // Test 9: Successful login
+    // ==========================================
+    // PART 1: REGISTRATION TESTS
+    // ==========================================
+
     @Test
-    public void testLoginUserSuccessful() {
+    public void testSuccessfulRegistration() {
+
+        LoginFeature user = createValidUser();
+
+        assertEquals(
+                "Registration successful.",
+                user.registerUser()
+        );
+    }
+
+    @Test
+    public void testUnsuccessfulRegistration() {
+
+        LoginFeature user = new LoginFeature(
+                "Mike",
+                "Smith",
+                "mike123",
+                "password",
+                "08212345"
+        );
+
+        assertEquals(
+                "Registration unsuccessful. "
+                + "Please check your details and try again.",
+                user.registerUser()
+        );
+    }
+
+    // ==========================================
+    // PART 1: LOGIN TESTS
+    // ==========================================
+
+    @Test
+    public void testSuccessfulLogin() {
+
+        LoginFeature user = createValidUser();
+
         assertTrue(
-                user.loginUser("j_s", "Password1!")
+                user.loginUser("m_123", "Password1!")
         );
     }
 
-    // Test 10: Failed login
     @Test
-    public void testLoginUserFailed() {
+    public void testUnsuccessfulLoginWrongUsername() {
+
+        LoginFeature user = createValidUser();
+
         assertFalse(
-                user.loginUser("wrong", "wrongpassword")
+                user.loginUser("wrong", "Password1!")
         );
     }
 
-    // Test 11: Successful login status
     @Test
-    public void testReturnLoginStatusSuccessful() {
+    public void testUnsuccessfulLoginWrongPassword() {
 
-        String expected =
-                "Welcome John, Smith it is great to see you again.";
+        LoginFeature user = createValidUser();
+
+        assertFalse(
+                user.loginUser("m_123", "WrongPassword1!")
+        );
+    }
+
+    @Test
+    public void testLoginStatusSuccessful() {
+
+        LoginFeature user = createValidUser();
 
         assertEquals(
-                expected,
-                user.returnLoginStatus("j_s", "Password1!")
+                "Welcome Mike, Smith it is great to see you again.",
+                user.returnLoginStatus("m_123", "Password1!")
         );
     }
 
-    // Test 12: Failed login status
     @Test
-    public void testReturnLoginStatusFailed() {
+    public void testLoginStatusUnsuccessful() {
 
-        String expected =
-                "Username or password incorrect, please try again.";
+        LoginFeature user = createValidUser();
 
         assertEquals(
-                expected,
-                user.returnLoginStatus("wrong", "wrongpassword")
+                "Username or password incorrect, please try again.",
+                user.returnLoginStatus("m_123", "wrong")
         );
     }
 
-    // Test 13: First name getter
+    // ==========================================
+    // PART 2 AND PART 3: USER INFORMATION TESTS
+    // ==========================================
+
     @Test
     public void testGetFirstName() {
-        assertEquals("John", user.getFirstName());
+
+        LoginFeature user = createValidUser();
+
+        assertEquals("Mike", user.getFirstName());
     }
 
-    // Test 14: Last name getter
     @Test
     public void testGetLastName() {
+
+        LoginFeature user = createValidUser();
+
         assertEquals("Smith", user.getLastName());
     }
 
-    // Test 15: Username getter
     @Test
     public void testGetUsername() {
-        assertEquals("j_s", user.getUsername());
+
+        LoginFeature user = createValidUser();
+
+        assertEquals("m_123", user.getUsername());
     }
 
-    // Test 16: Phone number getter
     @Test
-    public void testGetCellPhoneNumber() {
-        assertEquals("+27821234567", user.getCellPhoneNumber());
-    }
-}
+    public void testGetPhoneNumber() {
 
+        LoginFeature user = createValidUser();
+
+        assertEquals("+27821234567", user.getPhoneNumber());
+    }
+
+    @Test
+    public void testGetFullName() {
+
+        LoginFeature user = createValidUser();
+
+        assertEquals("Mike Smith", user.getFullName());
+    }
+}   
