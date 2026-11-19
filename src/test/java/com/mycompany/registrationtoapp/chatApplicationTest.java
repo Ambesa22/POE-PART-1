@@ -17,61 +17,127 @@ import java.util.Scanner;
 public class chatApplicationTest {
 
 
-
     @Test
     void testValidMessage() {
+
         String message = "Hello, how are you?";
+
         assertTrue(chatApplication.isValidMessage(message));
     }
 
     @Test
     void testMessageExactly250Characters() {
+
         String message = "A".repeat(250);
+
         assertTrue(chatApplication.isValidMessage(message));
     }
 
     @Test
     void testMessageOver250Characters() {
+
         String message = "A".repeat(251);
+
         assertFalse(chatApplication.isValidMessage(message));
     }
 
     @Test
     void testEmptyMessageIsInvalid() {
+
         assertFalse(chatApplication.isValidMessage(""));
     }
 
     @Test
     void testWhitespaceMessageIsInvalid() {
+
         assertFalse(chatApplication.isValidMessage("   "));
     }
 
     @Test
-    void testValidSouthAfricanRecipient() {
-        assertTrue(chatApplication.isValidRecipient("+27821234567"));
+    void testNullMessageIsInvalid() {
+
+        assertFalse(chatApplication.isValidMessage(null));
     }
 
-    
+    // ==========================================
+    // PART 2: RECIPIENT VALIDATION TESTS
+    // ==========================================
+
+    @Test
+    void testValidInternationalSouthAfricanRecipient() {
+
+        assertTrue(
+                chatApplication.isValidRecipient("+27821234567")
+        );
+    }
+
+    @Test
+    void testValidLocalSouthAfricanRecipient() {
+
+        assertTrue(
+                chatApplication.isValidRecipient("0821234567")
+        );
+    }
 
     @Test
     void testRecipientContainingLetters() {
-        assertFalse(chatApplication.isValidRecipient("+2782ABC4567"));
+
+        assertFalse(
+                chatApplication.isValidRecipient("+2782ABC4567")
+        );
     }
 
     @Test
-    void testMessageIdContainsTenDigits() {
-        SentMessages message =
-                new SentMessages("+27821234567", "Hello Thanks", 0);
+    void testRecipientWithIncorrectLength() {
 
-        assertTrue(message.getMessageId().matches("\\d{10}"));
+        assertFalse(
+                chatApplication.isValidRecipient("+278212345")
+        );
+    }
+
+    @Test
+    void testEmptyRecipientIsInvalid() {
+
+        assertFalse(
+                chatApplication.isValidRecipient("")
+        );
+    }
+
+    @Test
+    void testNullRecipientIsInvalid() {
+
+        assertFalse(
+                chatApplication.isValidRecipient(null)
+        );
+    }
+
+   
+
+    @Test
+    void testMessageIdContainsTenDigits() {
+
+        SentMessages message = new SentMessages(
+                "+27821234567",
+                "Hello Thanks",
+                0
+        );
+
+        assertTrue(
+                message.getMessageId().matches("\\d{10}")
+        );
     }
 
     @Test
     void testMessageHashFormat() {
-        SentMessages message =
-                new SentMessages("+27821234567", "Hi Thanks", 0);
 
-        String expected = message.getMessageId().substring(0, 2)
+        SentMessages message = new SentMessages(
+                "+27821234567",
+                "Hi Thanks",
+                0
+        );
+
+        String expected =
+                message.getMessageId().substring(0, 2)
                 + ":0:HITHANKS";
 
         assertEquals(expected, message.getMessageHash());
@@ -79,39 +145,68 @@ public class chatApplicationTest {
 
     @Test
     void testReceiverGetter() {
-        SentMessages message =
-                new SentMessages("+27821234567", "Hello", 1);
 
-        assertEquals("+27821234567", message.getReceiver());
+        SentMessages message = new SentMessages(
+                "+27821234567",
+                "Hello",
+                1
+        );
+
+        assertEquals(
+                "+27821234567",
+                message.getReceiver()
+        );
     }
 
     @Test
     void testMessageTextGetter() {
-        SentMessages message =
-                new SentMessages("+27821234567", "Hello World", 1);
 
-        assertEquals("Hello World", message.getMessageText());
+        SentMessages message = new SentMessages(
+                "+27821234567",
+                "Hello World",
+                1
+        );
+
+        assertEquals(
+                "Hello World",
+                message.getMessageText()
+        );
     }
 
     @Test
     void testMessageNumberGetter() {
-        SentMessages message =
-                new SentMessages("+27821234567", "Hello", 5);
 
-        assertEquals(5, message.getMessageNumber());
+        SentMessages message = new SentMessages(
+                "+27821234567",
+                "Hello",
+                5
+        );
+
+        assertEquals(
+                5,
+                message.getMessageNumber()
+        );
     }
 
     @Test
     void testConstructorRejectsEmptyMessage() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new SentMessages("+27821234567", "", 0));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new SentMessages(
+                        "+27821234567",
+                        "",
+                        0
+                )
+        );
     }
-
-
+    
     @Test
     void testInitialTotalMessagesIsZero() {
+
         Scanner scanner = new Scanner(
-                new ByteArrayInputStream(new byte[0]));
+                new ByteArrayInputStream(new byte[0])
+        );
 
         chatApplication app = new chatApplication(scanner);
 
@@ -122,12 +217,31 @@ public class chatApplicationTest {
 
     @Test
     void testToStringContainsMessageDetails() {
-        SentMessages message =
-                new SentMessages("+27821234567", "Hello World", 1);
 
-        assertTrue(message.toString().contains(message.getMessageId()));
-        assertTrue(message.toString().contains(message.getMessageHash()));
-        assertTrue(message.toString().contains("+27821234567"));
-        assertTrue(message.toString().contains("Hello World"));
+        SentMessages message = new SentMessages(
+                "+27821234567",
+                "Hello World",
+                1
+        );
+
+        assertTrue(
+                message.toString().contains(message.getMessageId())
+        );
+
+        assertTrue(
+                message.toString().contains(message.getMessageHash())
+        );
+
+        assertTrue(
+                message.toString().contains("+27821234567")
+        );
+
+        assertTrue(
+                message.toString().contains("Hello World")
+        );
     }
 }
+
+
+
+   

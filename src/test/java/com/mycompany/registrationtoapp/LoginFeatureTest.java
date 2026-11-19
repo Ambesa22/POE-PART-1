@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class LoginFeatureTest {
 
+
     // Create a valid user for testing.
     private LoginFeature createValidUser() {
 
@@ -24,7 +25,9 @@ public class LoginFeatureTest {
         );
     }
 
-   
+    // ==========================================
+    // PART 1: USERNAME VALIDATION TESTS
+    // ==========================================
 
     @Test
     public void testUsernameCorrectlyFormatted() {
@@ -38,11 +41,8 @@ public class LoginFeatureTest {
     public void testUsernameWithoutUnderscore() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "mike1",
-                "Password1!",
-                "+27821234567"
+                "Mike", "Smith", "mike1",
+                "Password1!", "+27821234567"
         );
 
         assertFalse(user.checkUsername());
@@ -52,11 +52,8 @@ public class LoginFeatureTest {
     public void testUsernameLongerThanFiveCharacters() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "mike_123",
-                "Password1!",
-                "+27821234567"
+                "Mike", "Smith", "mike_123",
+                "Password1!", "+27821234567"
         );
 
         assertFalse(user.checkUsername());
@@ -66,11 +63,8 @@ public class LoginFeatureTest {
     public void testUsernameWithUnderscoreAndFiveCharacters() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "m_123",
-                "Password1!",
-                "+27821234567"
+                "Mike", "Smith", "m_123",
+                "Password1!", "+27821234567"
         );
 
         assertTrue(user.checkUsername());
@@ -92,11 +86,8 @@ public class LoginFeatureTest {
     public void testPasswordWithoutCapitalLetter() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "m_123",
-                "password1!",
-                "+27821234567"
+                "Mike", "Smith", "m_123",
+                "password1!", "+27821234567"
         );
 
         assertFalse(user.checkPassword());
@@ -106,11 +97,8 @@ public class LoginFeatureTest {
     public void testPasswordWithoutNumber() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "m_123",
-                "Password!",
-                "+27821234567"
+                "Mike", "Smith", "m_123",
+                "Password!", "+27821234567"
         );
 
         assertFalse(user.checkPassword());
@@ -120,11 +108,8 @@ public class LoginFeatureTest {
     public void testPasswordWithoutSpecialCharacter() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "m_123",
-                "Password12",
-                "+27821234567"
+                "Mike", "Smith", "m_123",
+                "Password12", "+27821234567"
         );
 
         assertFalse(user.checkPassword());
@@ -134,27 +119,31 @@ public class LoginFeatureTest {
     public void testPasswordLessThanEightCharacters() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "m_123",
-                "Pass1!",
-                "+27821234567"
+                "Mike", "Smith", "m_123",
+                "Pass1!", "+27821234567"
         );
 
         assertFalse(user.checkPassword());
     }
 
-  
+    // ==========================================
+    // PART 1: CELLPHONE VALIDATION TESTS
+    // ==========================================
+
+    @Test
+    public void testInternationalSouthAfricanNumber() {
+
+        LoginFeature user = createValidUser();
+
+        assertTrue(user.checkPhoneNumber());
+    }
 
     @Test
     public void testLocalSouthAfricanCellphoneNumber() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "m_123",
-                "Password1!",
-                "0821234567"
+                "Mike", "Smith", "m_123",
+                "Password1!", "0821234567"
         );
 
         assertTrue(user.checkPhoneNumber());
@@ -164,27 +153,34 @@ public class LoginFeatureTest {
     public void testInvalidCellphoneNumber() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "m_123",
-                "Password1!",
-                "08212345"
+                "Mike", "Smith", "m_123",
+                "Password1!", "08212345"
         );
 
         assertFalse(user.checkPhoneNumber());
     }
 
-   
+    // ==========================================
+    // PART 1: REGISTRATION TESTS
+    // ==========================================
+
+    @Test
+    public void testSuccessfulRegistration() {
+
+        LoginFeature user = createValidUser();
+
+        assertEquals(
+                "Registration successful.",
+                user.registerUser()
+        );
+    }
 
     @Test
     public void testUnsuccessfulRegistration() {
 
         LoginFeature user = new LoginFeature(
-                "Mike",
-                "Smith",
-                "mike123",
-                "password",
-                "08212345"
+                "Mike", "Smith", "mike123",
+                "password", "08212345"
         );
 
         assertEquals(
@@ -194,7 +190,9 @@ public class LoginFeatureTest {
         );
     }
 
-    
+    // ==========================================
+    // PART 1: LOGIN TESTS
+    // ==========================================
 
     @Test
     public void testSuccessfulLogin() {
@@ -291,4 +289,5 @@ public class LoginFeatureTest {
 
         assertEquals("Mike Smith", user.getFullName());
     }
-}   
+}
+    

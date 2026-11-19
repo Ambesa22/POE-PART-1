@@ -15,7 +15,7 @@ import java.util.Locale;
  */
 public class SentMessages {
 
- 
+
     private static final SecureRandom RANDOM = new SecureRandom();
 
     // Message details
@@ -48,14 +48,9 @@ public class SentMessages {
                     "Recipient cannot be empty.");
         }
 
-        if (messageText == null || messageText.trim().isEmpty()) {
+        if (!checkMessage(messageText)) {
             throw new IllegalArgumentException(
-                    "Message cannot be empty.");
-        }
-
-        if (messageText.length() > 250) {
-            throw new IllegalArgumentException(
-                    "Message cannot exceed 250 characters.");
+                    "Message cannot be empty or exceed 250 characters.");
         }
 
         this.sender = sender;
@@ -79,10 +74,8 @@ public class SentMessages {
     }
 
     // PART 2: Generate the message hash.
-    // The hash uses:
-    // First two digits of the message ID,
-    // message number,
-    // first word and last word of the message.
+    // Uses the first two digits of the message ID,
+    // message number, first word and last word.
     private String generateMessageHash() {
 
         String[] words = messageText.trim().split("\\s+");
@@ -151,3 +144,6 @@ public class SentMessages {
                 + "\nMessage Number: " + messageNumber;
     }
 }
+
+ 
+   

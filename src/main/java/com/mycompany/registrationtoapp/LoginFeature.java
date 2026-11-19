@@ -82,7 +82,7 @@ public class LoginFeature {
     public boolean checkPhoneNumber() {
 
         if (phoneNumber != null
-                && (phoneNumber.matches("^\\\\+27[0-9]{9}$")
+                && (phoneNumber.matches("^\\+27[0-9]{9}$")
                 || phoneNumber.matches("^0[0-9]{9}$"))) {
 
             System.out.println("Cellphone number successfully captured.");
@@ -139,8 +139,7 @@ public class LoginFeature {
         }
     }
 
-    // PART 2 AND PART 3: Getters for user information.
-    // These allow other classes to access the user's details.
+   
 
     public String getFirstName() {
         return firstName;

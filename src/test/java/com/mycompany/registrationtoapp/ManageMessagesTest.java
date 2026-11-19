@@ -5,6 +5,7 @@
 package com.mycompany.registrationtoapp;
 
 
+import java.nio.file.Files;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
@@ -22,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ManageMessagesTest {
     
-  @TempDir
+
+
+    @TempDir
     Path temporaryFolder;
 
     private ManageMessages manager;
@@ -53,7 +56,7 @@ public class ManageMessagesTest {
     }
 
     // ==========================================
-    // PART 2: SENT MESSAGE TESTS
+    // PART 2: SENT AND DISREGARDED MESSAGE TESTS
     // ==========================================
 
     @Test
@@ -99,6 +102,14 @@ public class ManageMessagesTest {
         assertTrue(manager.getSentMessages().isEmpty());
     }
 
+    @Test
+    public void testAddNullDisregardedMessage() {
+
+        manager.addDisregardedMessage(null);
+
+        assertTrue(manager.getDisregardedMessages().isEmpty());
+    }
+
     // ==========================================
     // PART 3: STORE AND LOAD JSON TESTS
     // ==========================================
@@ -130,7 +141,7 @@ public class ManageMessagesTest {
 
         assertTrue(manager.addStoredMessage(message));
 
-        assertTrue(java.nio.file.Files.exists(testJsonFile));
+        assertTrue(Files.exists(testJsonFile));
     }
 
     @Test
@@ -150,10 +161,32 @@ public class ManageMessagesTest {
 
         assertEquals(1, newManager.getStoredMessages().size());
 
+        SentMessages loadedMessage =
+                newManager.getStoredMessages().get(0);
+
         assertEquals(
-                "This message must be loaded.",
-                newManager.getStoredMessages()
-                        .get(0).getMessageText()
+                message.getMessageId(),
+                loadedMessage.getMessageId()
+        );
+
+        assertEquals(
+                message.getMessageHash(),
+                loadedMessage.getMessageHash()
+        );
+
+        assertEquals(
+                message.getMessageText(),
+                loadedMessage.getMessageText()
+        );
+
+        assertEquals(
+                message.getSender(),
+                loadedMessage.getSender()
+        );
+
+        assertEquals(
+                message.getReceiver(),
+                loadedMessage.getReceiver()
         );
     }
 
@@ -186,6 +219,8 @@ public class ManageMessagesTest {
         assertEquals(1, ids.size());
 
         assertEquals(message.getMessageId(), ids.get(0));
+
+        assertTrue(ids.get(0).matches("\\d{10}"));
     }
 
     @Test
@@ -205,6 +240,8 @@ public class ManageMessagesTest {
         assertEquals(1, hashes.size());
 
         assertEquals(message.getMessageHash(), hashes.get(0));
+
+        assertFalse(hashes.get(0).isEmpty());
     }
 
     // ==========================================
@@ -318,6 +355,15 @@ public class ManageMessagesTest {
         assertFalse(result.isPresent());
     }
 
+    @Test
+    public void testSearchByNullMessageId() {
+
+        Optional<SentMessages> result =
+                manager.searchByMessageId(null);
+
+        assertFalse(result.isPresent());
+    }
+
     // ==========================================
     // PART 3: SEARCH BY RECIPIENT TESTS
     // ==========================================
@@ -409,6 +455,23 @@ public class ManageMessagesTest {
         assertEquals(1, manager.getStoredMessages().size());
     }
 
+    @Test
+    public void testDeleteMessageWithNullHash() {
+
+        SentMessages message = createMessage(
+                "Mike Smith",
+                "0821234567",
+                "Keep this message.",
+                1
+        );
+
+        manager.addStoredMessage(message);
+
+        assertFalse(manager.deleteByHash(null));
+
+        assertEquals(1, manager.getStoredMessages().size());
+    }
+
     // ==========================================
     // PART 3: FULL MESSAGE REPORT TEST
     // ==========================================
@@ -459,7 +522,6 @@ public class ManageMessagesTest {
         );
 
         manager.addSentMessage(sentMessage);
-
         manager.addDisregardedMessage(disregardedMessage);
 
         assertTrue(manager.addStoredMessage(storedMessage));

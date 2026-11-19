@@ -21,21 +21,24 @@ import java.util.Scanner;
 
 
 public class chatApplication {
- private final Scanner input;
+
+
+    private final Scanner input;
     private final ManageMessages manager;
 
     private int messageNumber = 0;
-    private String senderName = "QuickChat";
+    private final String senderName;
 
-    // Constructor used by RegistrationToApp.java.
+    // Constructor for compatibility.
     public chatApplication(Scanner input) {
         this(input, "QuickChat");
     }
 
-    // Constructor allowing the logged-in user's name to be used.
+    // Constructor using the registered user's name.
     public chatApplication(Scanner input, String senderName) {
 
         this.input = input;
+
         this.senderName = (senderName == null
                 || senderName.trim().isEmpty())
                 ? "QuickChat" : senderName.trim();
@@ -44,6 +47,7 @@ public class chatApplication {
 
         // Continue numbering from previously stored messages.
         for (SentMessages message : manager.getStoredMessages()) {
+
             if (message.getMessageNumber() > messageNumber) {
                 messageNumber = message.getMessageNumber();
             }
@@ -173,10 +177,13 @@ public class chatApplication {
                     manager.addSentMessage(message);
 
                     System.out.println("\nMessage successfully sent.");
+
                     System.out.println("Message Hash: "
                             + message.getMessageHash());
 
-                    System.out.println(message.getMessageText());
+                    System.out.println("Message: "
+                            + message.getMessageText());
+
                     break;
 
                 case "2":
@@ -186,7 +193,6 @@ public class chatApplication {
                     System.out.println(
                             "Message disregarded successfully.");
 
-                    // Do not display the hash for a disregarded message.
                     break;
 
                 case "3":
@@ -205,6 +211,7 @@ public class chatApplication {
                                 "Message could not be stored. "
                                 + "Please try again.");
                     }
+
                     break;
 
                 default:
@@ -228,7 +235,7 @@ public class chatApplication {
         }
     }
 
-  
+    // PART 2: Validate a message.
     public static boolean isValidMessage(String messageText) {
 
         return messageText != null
@@ -236,7 +243,7 @@ public class chatApplication {
                 && messageText.length() <= 250;
     }
 
-    // PART 2: Validate the recipient's South African number.
+    // PART 2: Validate South African cellphone numbers.
     public static boolean isValidRecipient(String recipient) {
 
         return recipient != null
@@ -244,13 +251,13 @@ public class chatApplication {
                 || recipient.matches("^0[0-9]{9}$"));
     }
 
-    // PART 2: Return the total number of successfully sent messages.
+    // PART 2: Return the total number of sent messages.
     public int returnTotalMessages() {
 
         return manager.getSentMessages().size();
     }
 
-    // PART 2: Print all successfully sent messages.
+    // PART 2: Display all successfully sent messages.
     public void printMessages() {
 
         List<SentMessages> messages = manager.getSentMessages();
@@ -264,14 +271,17 @@ public class chatApplication {
         System.out.println("\n========== SENT MESSAGES ==========");
 
         for (SentMessages message : messages) {
+
             System.out.println(message);
             System.out.println("-----------------------------------");
         }
     }
 
+    // PART 2: Display recently sent messages.
     public void showSentMessages() {
 
-        System.out.println("\n========== RECENTLY SENT MESSAGES ==========");
+        System.out.println(
+                "\n========== RECENTLY SENT MESSAGES ==========");
 
         printMessages();
 
@@ -279,7 +289,7 @@ public class chatApplication {
                 + returnTotalMessages());
     }
 
-  
+    // PART 3: Stored messages menu.
     public void storedMessagesMenu() {
 
         boolean running = true;
@@ -287,7 +297,8 @@ public class chatApplication {
         while (running) {
 
             System.out.println("\n========== STORED MESSAGES MENU ==========");
-            System.out.println("1. Display sender and recipient of stored messages");
+            System.out.println(
+                    "1. Display sender and recipient of stored messages");
             System.out.println("2. Display the longest stored message");
             System.out.println("3. Search for a message using message ID");
             System.out.println("4. Search for messages using recipient");
@@ -336,7 +347,7 @@ public class chatApplication {
         }
     }
 
-   
+    // PART 3: Search for a message using its ID.
     private void searchMessageById() {
 
         System.out.print("\nEnter the message ID: ");
@@ -350,6 +361,7 @@ public class chatApplication {
             SentMessages message = result.get();
 
             System.out.println("\nMessage found!");
+
             System.out.println("Recipient: "
                     + message.getReceiver());
 
@@ -362,7 +374,7 @@ public class chatApplication {
         }
     }
 
-    // PART 3: Search for stored messages by recipient.
+    // PART 3: Search for messages by recipient.
     private void searchMessagesByRecipient() {
 
         System.out.print("\nEnter the recipient cellphone number: ");
@@ -417,7 +429,7 @@ public class chatApplication {
         }
     }
 
-    // Allows tests or other classes to access the message manager.
+    // Allow tests and other classes to access the manager.
     public ManageMessages getMessageManager() {
         return manager;
     }
