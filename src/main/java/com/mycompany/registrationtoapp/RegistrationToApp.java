@@ -20,16 +20,13 @@ public class RegistrationToApp {
 
     public static void main(String[] args) {
 
-        // Create Scanner for user input
+      
         Scanner input = new Scanner(System.in);
 
         System.out.println("=================================");
         System.out.println("       WELCOME TO QUICKCHAT      ");
         System.out.println("=================================");
 
-        // =================================
-        // PART 1: USER REGISTRATION
-        // =================================
 
         System.out.println("\n===== USER REGISTRATION =====");
 
@@ -112,9 +109,7 @@ public class RegistrationToApp {
 
         System.out.println("\n" + user.registerUser());
 
-        // =================================
-        // PART 1: USER LOGIN
-        // =================================
+      
 
         System.out.println("\n===== USER LOGIN =====");
 
@@ -132,9 +127,7 @@ public class RegistrationToApp {
 
         System.out.println("\n" + loginStatus);
 
-        // =================================
-        // PART 2 AND PART 3: QUICKCHAT
-        // =================================
+       
 
         if (user.loginUser(loginUsername, loginPassword)) {
 
@@ -157,7 +150,7 @@ public class RegistrationToApp {
                     + "Access to QuickChat has been denied.");
         }
 
-        // Close Scanner after application finishes
+      
         input.close();
     }
 }

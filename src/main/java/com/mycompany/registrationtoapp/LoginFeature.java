@@ -28,8 +28,6 @@ public class LoginFeature {
         this.phoneNumber = phoneNumber;
     }
 
-    // PART 1: Check whether the username is valid.
-    // Username must contain an underscore and be no longer than 5 characters.
     public boolean checkUsername() {
 
         if (username != null
@@ -116,7 +114,7 @@ public class LoginFeature {
         }
     }
 
-    // PART 1: Verify the login details.
+
     public boolean loginUser(String enteredUsername,
                              String enteredPassword) {
 
@@ -126,7 +124,6 @@ public class LoginFeature {
                 && password.equals(enteredPassword);
     }
 
-    // PART 1: Return the login status.
     public String returnLoginStatus(String enteredUsername,
                                     String enteredPassword) {
 
@@ -165,7 +162,6 @@ public class LoginFeature {
         return phoneNumber;
     }
 
-    // PART 2 AND PART 3: Get the full name of the registered user.
     public String getFullName() {
         return firstName + " " + lastName;
     } 

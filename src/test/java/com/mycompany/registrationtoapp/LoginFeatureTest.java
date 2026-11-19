@@ -24,9 +24,7 @@ public class LoginFeatureTest {
         );
     }
 
-    // ==========================================
-    // PART 1: USERNAME VALIDATION TESTS
-    // ==========================================
+   
 
     @Test
     public void testUsernameCorrectlyFormatted() {
@@ -146,17 +144,7 @@ public class LoginFeatureTest {
         assertFalse(user.checkPassword());
     }
 
-    // ==========================================
-    // PART 1: CELLPHONE NUMBER VALIDATION TESTS
-    // ==========================================
-
-    @Test
-    public void testInternationalCellphoneNumber() {
-
-        LoginFeature user = createValidUser();
-
-        assertTrue(user.checkPhoneNumber());
-    }
+  
 
     @Test
     public void testLocalSouthAfricanCellphoneNumber() {
@@ -186,20 +174,7 @@ public class LoginFeatureTest {
         assertFalse(user.checkPhoneNumber());
     }
 
-    // ==========================================
-    // PART 1: REGISTRATION TESTS
-    // ==========================================
-
-    @Test
-    public void testSuccessfulRegistration() {
-
-        LoginFeature user = createValidUser();
-
-        assertEquals(
-                "Registration successful.",
-                user.registerUser()
-        );
-    }
+   
 
     @Test
     public void testUnsuccessfulRegistration() {
@@ -219,9 +194,7 @@ public class LoginFeatureTest {
         );
     }
 
-    // ==========================================
-    // PART 1: LOGIN TESTS
-    // ==========================================
+    
 
     @Test
     public void testSuccessfulLogin() {

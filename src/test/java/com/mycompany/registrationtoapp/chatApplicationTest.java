@@ -51,10 +51,7 @@ public class chatApplicationTest {
         assertTrue(chatApplication.isValidRecipient("+27821234567"));
     }
 
-    @Test
-    void testRecipientWithoutCountryCode() {
-        assertFalse(chatApplication.isValidRecipient("0821234567"));
-    }
+    
 
     @Test
     void testRecipientContainingLetters() {

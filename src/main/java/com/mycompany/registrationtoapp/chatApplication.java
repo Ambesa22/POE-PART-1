@@ -228,7 +228,7 @@ public class chatApplication {
         }
     }
 
-    // PART 2: Validate the message.
+  
     public static boolean isValidMessage(String messageText) {
 
         return messageText != null
@@ -269,7 +269,6 @@ public class chatApplication {
         }
     }
 
-    // PART 2: Display recently sent messages.
     public void showSentMessages() {
 
         System.out.println("\n========== RECENTLY SENT MESSAGES ==========");
@@ -280,7 +279,7 @@ public class chatApplication {
                 + returnTotalMessages());
     }
 
-    // PART 3: Stored messages menu.
+  
     public void storedMessagesMenu() {
 
         boolean running = true;
@@ -337,7 +336,7 @@ public class chatApplication {
         }
     }
 
-    // PART 3: Search for a stored message using its ID.
+   
     private void searchMessageById() {
 
         System.out.print("\nEnter the message ID: ");

@@ -54,7 +54,7 @@ public class ManageMessages {
         loadStoredMessages();
     }
 
-    // PART 2: Add a successfully sent message.
+  
     public void addSentMessage(SentMessages message) {
 
         if (message != null) {
@@ -62,15 +62,13 @@ public class ManageMessages {
         }
     }
 
-    // PART 2: Add a disregarded message.
+
     public void addDisregardedMessage(SentMessages message) {
 
         if (message != null) {
             disregardedMessages.add(message);
         }
     }
-
-    // PART 2 AND PART 3: Store a message and save it to JSON.
     public boolean addStoredMessage(SentMessages message) {
 
         if (message == null) {

@@ -2,7 +2,14 @@
   {
     "messageId": "4152702361",
     "messageHash": "41:1:INOW",
-    "recipient": "+27634495280",
-    "message": "i am at school right now"
+    "messageNumber": 0
+  },
+  {
+    "messageId": "8758664403",
+    "sender": "QuickChat",
+    "receiver": "0734446815",
+    "messageText": "hey how are you",
+    "messageHash": "87:1:HEYYOU",
+    "messageNumber": 1
   }
 ]
